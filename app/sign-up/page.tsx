@@ -49,4 +49,33 @@ function SignUp() {
         }
 }
 
+    async function onVerify(e: React.FormEvent){
+        e.preventDefault()
+        if (!isLoaded){
+            return;
+        }
+
+        try{
+            const completeSignup = await signUp.attemptEmailAddressVerification({code})
+
+            if (completeSignup.status !== 'complete'){
+                console.log(JSON.stringify(completeSignup, null, 2))
+            }
+
+            if (completeSignup.status === 'complete'){
+                await setActive({ session: completeSignup.createdSessionId })   
+                router.push('/dashboard');
+            }
+            
+        }
+        catch (err: any) {
+            console.log(JSON.stringify(err, null, 2))
+            setError(err.errors[0].message)
+        }
+
+        return (
+            
+        )
+    }
+}
 export default SignUp
